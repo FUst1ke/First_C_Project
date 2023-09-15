@@ -54,15 +54,25 @@ using System.Threading.Tasks;
 
 //------------------------------------------------------
 
+//double osztas = eredmeny.Divide(firstNum, secondNum);
+//int szorzas = eredmeny.Multiplication(firstNum, secondNum);
+//int osszeadas = eredmeny.Add(firstNum, secondNum);
+//int kivonas = eredmeny.Sub(firstNum, secondNum);
+//Console.WriteLine("A két szám \n osztva: " + osztas + "\n szorozva: " + szorzas + "\n összeadva: " + osszeadas + "\n kivonva: " + kivonas);
 
+//------------------------------------------------------
 
 namespace akarmi
 {
-    class Program
+
+    class Program 
     {
         static void Main(string[] args) {
             Matek eredmeny = new Matek();
-            
+            Dictionary<string, string> TYPE = new Dictionary<string, string>();
+
+            Console.WriteLine("Add meg a művelet típusát: (divide, add, multi, sub)");
+            string type = Console.ReadLine();
             Console.WriteLine("Add meg az első számot: ");
             string firstNum = Console.ReadLine();
             Console.WriteLine("Add meg a második számot: ");
@@ -71,11 +81,13 @@ namespace akarmi
 
             //--------------------------------------------------------------
 
-            double osztas = eredmeny.Divide(firstNum, secondNum);
-            int szorzas = eredmeny.Multiplication(firstNum, secondNum);
-            int osszeadas = eredmeny.Add(firstNum, secondNum);
-            int kivonas = eredmeny.Sub(firstNum, secondNum);
-            Console.WriteLine("A két szám \n osztva: " + osztas + "\n szorozva: " + szorzas + "\n összeadva: " + osszeadas + "\n kivonva: " + kivonas);
+            var feladat = eredmeny.DoMath(type, firstNum, secondNum);
+            TYPE["divide"] = "Osztás";
+            TYPE["add"] = "Összeadás";
+            TYPE["sub"] = "Kivonás";
+            TYPE["multi"] = "Szorzás";
+
+            Console.WriteLine("A feladat eredménye (" + TYPE[type]+ "): " + feladat);
 
             //--------------------------------------------------------------
 
@@ -83,9 +95,10 @@ namespace akarmi
         }
 
     }
-    class Matek
-    {
-        public double Divide(string a, string b)
+
+    class Matek 
+    { 
+        private double Divide(string a, string b)
         {
             int firstNum = int.Parse(a);
             int secondNum = int.Parse(b);
@@ -93,7 +106,23 @@ namespace akarmi
             return eredmeny;
         }
 
-        public int Multiplication(string a, string b)
+        private int Multiplication(string a, string b)
+        {
+            int firstNum = int.Parse(a);
+            int secondNum = int.Parse(b);
+            int eredmeny = firstNum * secondNum;
+            return eredmeny;
+        }
+
+        private int Add(string a, string b)
+        {
+            int firstNum = int.Parse(a);
+            int secondNum = int.Parse(b);
+            int eredmeny = firstNum + secondNum;
+            return eredmeny;
+        }
+
+        private int Sub(string a, string b)
         {
             int firstNum = int.Parse(a);
             int secondNum = int.Parse(b);
@@ -101,19 +130,28 @@ namespace akarmi
             return eredmeny;
         }
 
-        public int Add(string a, string b)
+        public double DoMath(string type, string a, string b)
         {
-            int firstNum = int.Parse(a);
-            int secondNum = int.Parse(b);
-            int eredmeny = firstNum - secondNum;
-            return eredmeny;
-        }
-        public int Sub(string a, string b)
-        {
-            int firstNum = int.Parse(a);
-            int secondNum = int.Parse(b);
-            int eredmeny = firstNum - secondNum;
-            return eredmeny;
+            double result = 0;
+            switch (type)
+            {
+                case "divide":
+                    result = this.Divide(a, b);
+                    break;
+                case "add":
+                    result = this.Add(a, b);
+                    break;
+                case "multi":
+                    result = this.Multiplication(a, b);
+                    break;
+                case "sub":
+                    result = this.Sub(a, b);
+                    break;
+                default:
+                    Console.WriteLine("Nem sikerült feldolgozni a bejövő adatot.");
+                    break;
+            }
+            return result;
         }
     }
 }
